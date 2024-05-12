@@ -32,4 +32,9 @@ public class InMemoryProductRepository implements ProductRepository{
     public Optional<Product> findById(Integer productId) {
         return products.stream().filter(i ->Objects.equals(productId, i.getId())).findFirst();
     }
+
+    @Override
+    public void deleteById(Integer id) {
+        products.removeIf(i -> Objects.equals(id, i.getId()));
+    }
 }

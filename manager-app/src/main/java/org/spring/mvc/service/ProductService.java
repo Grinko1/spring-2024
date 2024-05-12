@@ -11,4 +11,8 @@ public interface ProductService {
      Product createProduct(String title, String details);
 
      Optional<Product> getById(Integer productId);
+
+     void updateProduct(Integer id, String title, String details);
+
+     void deleteProduct(Integer id);
 }
