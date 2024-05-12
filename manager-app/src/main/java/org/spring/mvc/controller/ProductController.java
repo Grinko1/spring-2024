@@ -1,23 +1,35 @@
 package org.spring.mvc.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.spring.mvc.entity.Product;
 import org.spring.mvc.payload.UpdateProductPayload;
 import org.spring.mvc.service.ProductService;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Locale;
+import java.util.NoSuchElementException;
 
 @Controller
 @AllArgsConstructor
 @RequestMapping("/catalog/products/{productId:\\d+}")
 public class ProductController {
     private final ProductService productService;
+    private final MessageSource messageSource;
 
     @ModelAttribute("product")
     public Product product(@PathVariable("productId") Integer productId) {
-        return productService.getById(productId).orElseThrow();
+        return productService.getById(productId).orElseThrow(() -> new NoSuchElementException
+                ("catalog.errors.product.not_found"));
     }
+
     @GetMapping
     public String getProduct() {
 
@@ -30,14 +42,31 @@ public class ProductController {
 
         return "catalog/products/edit";
     }
+
     @PostMapping("/edit")
-    public String edit(@ModelAttribute("product") Product product ,UpdateProductPayload payload) {
-      productService.updateProduct(product.getId(), payload.title(), payload.details());
-       return "redirect:/catalog/products/%d".formatted(product.getId());
+    public String edit( @ModelAttribute(value = "product", binding = false) Product product,@Valid UpdateProductPayload payload, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("payload", payload);
+            model.addAttribute("errors", bindingResult.getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage).toList());
+            return "catalog/products/edit";
+        } else {
+            productService.updateProduct(product.getId(), payload.title(), payload.details());
+            return "redirect:/catalog/products/%d".formatted(product.getId());
+        }
+
     }
+
     @PostMapping("/delete")
-    public String deleteProduct(@ModelAttribute("product") Product product ){
+    public String deleteProduct(@ModelAttribute("product") Product product) {
         productService.deleteProduct(product.getId());
         return "redirect:/catalog/products/list";
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public String handleNoSuchElementException(NoSuchElementException e, Model model, HttpServletResponse response, Locale locale) {
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        model.addAttribute("error", messageSource.getMessage(e.getMessage(), new Object[0], locale));
+        return "errors/404";
     }
 }

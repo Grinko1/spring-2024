@@ -1,6 +1,7 @@
-package org.spring.mvc.repository;
+package org.spring.rest.repository;
 
-import org.spring.mvc.entity.Product;
+
+import org.spring.rest.entity.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

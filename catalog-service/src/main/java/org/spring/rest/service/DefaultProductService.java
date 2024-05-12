@@ -1,8 +1,8 @@
-package org.spring.mvc.service;
+package org.spring.rest.service;
 
 import lombok.AllArgsConstructor;
-import org.spring.mvc.entity.Product;
-import org.spring.mvc.repository.ProductRepository;
+import org.spring.rest.entity.Product;
+import org.spring.rest.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

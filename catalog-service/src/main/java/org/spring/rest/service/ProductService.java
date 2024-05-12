@@ -1,6 +1,8 @@
-package org.spring.mvc.service;
+package org.spring.rest.service;
 
-import org.spring.mvc.entity.Product;
+
+
+import org.spring.rest.entity.Product;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,8 @@
-package org.spring.mvc.repository;
+package org.spring.rest.repository;
 
-import org.spring.mvc.entity.Product;
+
+
+import org.spring.rest.entity.Product;
 
 import java.util.List;
 import java.util.Optional;
