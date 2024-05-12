@@ -7,6 +7,7 @@ import org.spring.mvc.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -30,5 +31,12 @@ public class ProductsController {
     public String createProduct(NewProductPayload payload){
         Product product = productService.createProduct(payload.title(), payload.details());
         return  "redirect:/catalog/products/list";
+    }
+    @GetMapping("/{productId:\\d+}")
+    public String getProduct (@PathVariable("productId") Integer productId, Model model){
+        Product product = productService.getById(productId).orElseThrow();
+        model.addAttribute("product", product);
+
+        return"/catalog/products/product";
     }
 }
