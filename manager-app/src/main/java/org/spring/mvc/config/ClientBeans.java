@@ -9,7 +9,7 @@ import org.springframework.web.client.RestClient;
 @Configuration
 public class ClientBeans {
     @Bean
-    public RestClientProductRestClient productRestClient(@Value("$ {catalog.service.uri:http://localhost:8080}") String catalogUri){
+    public RestClientProductRestClient productRestClient(@Value("${catalog.service.uri:http://localhost:8080}") String catalogUri){
         return new RestClientProductRestClient(RestClient.builder()
                 .baseUrl(catalogUri)
                 .build());

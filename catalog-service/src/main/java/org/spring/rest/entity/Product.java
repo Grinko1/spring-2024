@@ -1,5 +1,7 @@
 package org.spring.rest.entity;
 
+import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +9,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(schema = "catalog",name = "t_product")
 public class Product {
-private Integer Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer Id;
 
-private String title;
-private String details;
+    @Column(name = "c_title")
+    private String title;
+
+    @Column(name = "c_details")
+    private String details;
 }

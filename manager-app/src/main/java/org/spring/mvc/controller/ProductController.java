@@ -1,8 +1,8 @@
 package org.spring.mvc.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.spring.mvc.client.BadRequestException;
 import org.spring.mvc.client.ProductsRestClient;
 import org.spring.mvc.entity.Product;
 import org.spring.mvc.payload.UpdateProductPayload;
@@ -10,8 +10,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
@@ -44,16 +42,20 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String edit( @ModelAttribute(value = "product", binding = false) Product product,@Valid UpdateProductPayload payload, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("payload", payload);
-            model.addAttribute("errors", bindingResult.getAllErrors().stream()
-                    .map(ObjectError::getDefaultMessage).toList());
-            return "catalog/products/edit";
-        } else {
-            productService.updateProduct(product.id(), payload.title(), payload.details());
-            return "redirect:/catalog/products/%d".formatted(product.id());
-        }
+    public String edit( @ModelAttribute(value = "product", binding = false) Product product,
+                        UpdateProductPayload payload,
+                        Model model) {
+            try{
+                productService.updateProduct(product.id(), payload.title(), payload.details());
+                return "redirect:/catalog/products/%d".formatted(product.id());
+            }catch (BadRequestException e){
+                model.addAttribute("payload", payload);
+                model.addAttribute("errors", e.getErrors());
+                return "catalog/products/edit";
+            }
+
+
+
 
     }
 
