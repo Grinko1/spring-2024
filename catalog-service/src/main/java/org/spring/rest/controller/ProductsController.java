@@ -23,20 +23,21 @@ public class ProductsController {
     private final MessageSource messageSource;
 
     @GetMapping
-    public List<Product> getAll() {
-        return productService.getAll();
+    public Iterable<Product> getAll(@RequestParam(name="filter", required = false) String filter) {
+        System.out.println("filter is " +filter);
+            return productService.findAllProducts(filter);
     }
 
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody NewProductPayload payload,
-                                                 BindingResult bindingResult,
-                                                 UriComponentsBuilder uriComponentsBuilder) throws BindException {
+                                           BindingResult bindingResult,
+                                           UriComponentsBuilder uriComponentsBuilder) throws BindException {
         if (bindingResult.hasErrors()) {
-        if(bindingResult instanceof BindException e){
-            throw e;
-        }else{
-            throw new BindException(bindingResult);
-        }
+            if (bindingResult instanceof BindException e) {
+                throw e;
+            } else {
+                throw new BindException(bindingResult);
+            }
         } else {
             Product product = productService.createProduct(payload.title(), payload.details());
             return ResponseEntity

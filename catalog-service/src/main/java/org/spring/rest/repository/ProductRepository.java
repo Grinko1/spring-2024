@@ -1,18 +1,10 @@
 package org.spring.rest.repository;
 
-
-
 import org.spring.rest.entity.Product;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
-import java.util.Optional;
+public interface ProductRepository extends CrudRepository<Product, Integer> {
 
-public interface ProductRepository {
-    List<Product> findAll();
-
-    Product save(Product product);
-
-    Optional<Product> findById(Integer productId);
-
-    void deleteById(Integer id);
+    //select * from catalog.t_product where c_title ilike :some world
+    Iterable<Product> findAllByTitleLikeIgnoreCase(String filter);
 }
