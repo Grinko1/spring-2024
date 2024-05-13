@@ -23,8 +23,8 @@ public class RestClientProductRestClient implements ProductsRestClient {
     private final RestClient restClient;
 
     @Override
-    public List<Product> findAllProducts() {
-        return restClient.get().uri("/api/products")
+    public List<Product> findAllProducts(String filter) {
+        return restClient.get().uri("/api/products?filter={filter}", filter)
                 .retrieve()
                 .body(PRODUCTS_TYPE_REFERENCE);
     }
