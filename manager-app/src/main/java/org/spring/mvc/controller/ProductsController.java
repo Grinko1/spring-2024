@@ -2,9 +2,9 @@ package org.spring.mvc.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.spring.mvc.client.ProductsRestClient;
 import org.spring.mvc.entity.Product;
 import org.spring.mvc.payload.NewProductPayload;
-import org.spring.mvc.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/catalog/products")
 public class ProductsController {
-    private final ProductService productService;
+    private final ProductsRestClient productService;
 
 
     @GetMapping("/list")
     public String getProducts(Model model) {
-        model.addAttribute("products", productService.getAll());
+        model.addAttribute("products", productService.findAllProducts());
         return "catalog/products/list";
     }
 
@@ -39,7 +39,7 @@ public class ProductsController {
             return "catalog/products/new_product";
         } else {
             Product product = productService.createProduct(payload.title(), payload.details());
-            return "redirect:/catalog/products/%d".formatted(product.getId());
+            return "redirect:/catalog/products/%d".formatted(product.id());
         }
 
     }

@@ -3,9 +3,9 @@ package org.spring.mvc.controller;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.spring.mvc.client.ProductsRestClient;
 import org.spring.mvc.entity.Product;
 import org.spring.mvc.payload.UpdateProductPayload;
-import org.spring.mvc.service.ProductService;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,12 +21,12 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @RequestMapping("/catalog/products/{productId:\\d+}")
 public class ProductController {
-    private final ProductService productService;
+    private final ProductsRestClient productService;
     private final MessageSource messageSource;
 
     @ModelAttribute("product")
     public Product product(@PathVariable("productId") Integer productId) {
-        return productService.getById(productId).orElseThrow(() -> new NoSuchElementException
+        return productService.getProductById(productId).orElseThrow(() -> new NoSuchElementException
                 ("catalog.errors.product.not_found"));
     }
 
@@ -51,15 +51,15 @@ public class ProductController {
                     .map(ObjectError::getDefaultMessage).toList());
             return "catalog/products/edit";
         } else {
-            productService.updateProduct(product.getId(), payload.title(), payload.details());
-            return "redirect:/catalog/products/%d".formatted(product.getId());
+            productService.updateProduct(product.id(), payload.title(), payload.details());
+            return "redirect:/catalog/products/%d".formatted(product.id());
         }
 
     }
 
     @PostMapping("/delete")
     public String deleteProduct(@ModelAttribute("product") Product product) {
-        productService.deleteProduct(product.getId());
+        productService.deleteProduct(product.id());
         return "redirect:/catalog/products/list";
     }
 
