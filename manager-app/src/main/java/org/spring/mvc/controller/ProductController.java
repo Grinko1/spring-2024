@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
@@ -23,7 +24,8 @@ public class ProductController {
     private final MessageSource messageSource;
 
     @ModelAttribute("product")
-    public Product product(@PathVariable("productId") Integer productId) {
+    public Product product(@PathVariable("productId") Integer productId, Principal principal) {
+        System.out.println("principal "+ principal);
         return productService.getProductById(productId).orElseThrow(() -> new NoSuchElementException
                 ("catalog.errors.product.not_found"));
     }

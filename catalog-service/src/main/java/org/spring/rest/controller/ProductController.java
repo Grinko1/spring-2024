@@ -30,6 +30,7 @@ public class ProductController {
 
     @GetMapping
     public Product getById(@ModelAttribute("product") Product product) {
+        System.out.println("api get product");
         return product;
     }
 

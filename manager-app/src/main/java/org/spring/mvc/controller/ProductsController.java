@@ -1,6 +1,7 @@
 package org.spring.mvc.controller;
 
 import lombok.AllArgsConstructor;
+import org.slf4j.LoggerFactory;
 import org.spring.mvc.client.BadRequestException;
 import org.spring.mvc.client.ProductsRestClient;
 import org.spring.mvc.entity.Product;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
 
 @Controller
 @AllArgsConstructor
@@ -21,7 +24,10 @@ public class ProductsController {
 
 
     @GetMapping("/list")
-    public String getProducts(Model model, @RequestParam(name="filter", required = false) String filter) {
+    public String getProducts(Model model, @RequestParam(name="filter", required = false) String filter, Principal principal) {
+        System.out.println(principal );
+        LoggerFactory.getLogger(ProductsController.class)
+                        .info("User: {}", principal);
         model.addAttribute("products", productService.findAllProducts(filter));
         model.addAttribute("filter", filter);
         return "catalog/products/list";

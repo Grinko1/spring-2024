@@ -31,6 +31,13 @@ public class RestClientProductRestClient implements ProductsRestClient {
 
     @Override
     public Optional<Product> getProductById(int id) {
+        Optional<Product> pr = Optional.ofNullable(
+                restClient.get()
+                        .uri("/api/products/{id}", id)
+                        .retrieve()
+                        .body(Product.class)
+        );
+        System.out.println("product " + pr);
         try {
             return Optional.ofNullable(
                     restClient.get()

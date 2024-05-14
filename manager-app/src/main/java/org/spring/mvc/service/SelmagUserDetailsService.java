@@ -29,7 +29,7 @@ public class SelmagUserDetailsService implements UserDetailsService {
                                 .toList())
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("User %s not found".formatted(username)));
-        System.out.println(" user1 "+user1);
+        System.out.println(" user1 "+ user1);
         return user1;
     }
 }
