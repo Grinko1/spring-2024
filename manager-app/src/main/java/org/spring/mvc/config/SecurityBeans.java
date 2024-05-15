@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Configuration
-public class SecurityBeans {
+public class  SecurityBeans {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http

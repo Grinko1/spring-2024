@@ -26,8 +26,8 @@ public class ProductsController {
     @GetMapping("/list")
     public String getProducts(Model model, @RequestParam(name="filter", required = false) String filter, Principal principal) {
         System.out.println(principal );
-        LoggerFactory.getLogger(ProductsController.class)
-                        .info("User: {}", principal);
+//        LoggerFactory.getLogger(ProductsController.class)
+//                        .info("User: {}", principal);
         model.addAttribute("products", productService.findAllProducts(filter));
         model.addAttribute("filter", filter);
         return "catalog/products/list";
