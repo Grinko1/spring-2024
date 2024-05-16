@@ -1,16 +1,9 @@
 package org.spring.reactive.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class FavoriteProduct {
-    private UUID id;
+public record FavoriteProduct(UUID id,int productId) {
 
-    private int productId;
 }
