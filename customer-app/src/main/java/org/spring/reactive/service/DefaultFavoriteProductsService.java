@@ -1,15 +1,18 @@
 package org.spring.reactive.service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.spring.reactive.entity.FavoriteProduct;
 import org.spring.reactive.repository.FavoriteProductRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Getter
 public class DefaultFavoriteProductsService implements FavoriteProductsService {
     private final FavoriteProductRepository favoriteProductRepository;
     @Override
@@ -24,4 +27,10 @@ public class DefaultFavoriteProductsService implements FavoriteProductsService {
     public Mono<FavoriteProduct> findFavoriteProductByProductId(int productId){
         return favoriteProductRepository.findByProductId(productId);
     }
+
+    @Override
+    public Flux<FavoriteProduct> findFavoriteProducts() {
+        return favoriteProductRepository.findFavoriteProducts();
+    }
+
 }

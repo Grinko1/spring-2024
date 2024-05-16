@@ -1,6 +1,7 @@
 package org.spring.reactive.repository;
 
 import org.spring.reactive.entity.FavoriteProduct;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface FavoriteProductRepository {
@@ -9,4 +10,6 @@ public interface FavoriteProductRepository {
     Mono<Void> deleteByProductId(int productId);
 
     Mono<FavoriteProduct> findByProductId(int productId);
+
+    Flux<FavoriteProduct> findFavoriteProducts();
 }

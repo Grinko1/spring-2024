@@ -3,6 +3,7 @@ package org.spring.reactive.client;
 import lombok.RequiredArgsConstructor;
 import org.spring.reactive.entity.Product;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -24,6 +25,7 @@ public class WebClientProductsClient implements ProductsClient {
         return webClient.get()
                 .uri("/api/products/{productId}", productId)
                 .retrieve()
-                .bodyToMono(Product.class);
+                .bodyToMono(Product.class)
+                .onErrorComplete(WebClientResponseException.NotFound.class);
     }
 }
