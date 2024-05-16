@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.spring.reactive.entity.Product;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @RequiredArgsConstructor
@@ -16,5 +17,13 @@ public class WebClientProductsClient implements ProductsClient {
                 .retrieve()
                 .bodyToFlux(Product.class)
                 ;
+    }
+
+    @Override
+    public Mono<Product> findProduct(int productId) {
+        return webClient.get()
+                .uri("/api/products/{productId}", productId)
+                .retrieve()
+                .bodyToMono(Product.class);
     }
 }
