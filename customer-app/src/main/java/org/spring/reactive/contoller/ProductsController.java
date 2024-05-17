@@ -2,10 +2,9 @@ package org.spring.reactive.contoller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.spring.reactive.client.FavoriteProductsClient;
 import org.spring.reactive.client.ProductsClient;
 import org.spring.reactive.entity.FavoriteProduct;
-import org.spring.reactive.repository.FavoriteProductRepository;
-import org.spring.reactive.service.FavoriteProductsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ import reactor.core.publisher.Mono;
 public class ProductsController {
 
     private final ProductsClient productsClient;
-    private final FavoriteProductsService favoritesService;
+    private final FavoriteProductsClient favoritesService;
 
     @GetMapping("/list")
     public Mono<String> getAllProducts(Model model, @RequestParam(name = "filter", required = false) String filter) {
@@ -36,7 +35,7 @@ public class ProductsController {
         model.addAttribute("filter", filter);
 
         return favoritesService.findFavoriteProducts()
-                .map(FavoriteProduct::getProductId)
+                .map(FavoriteProduct::productId)
                 .collectList()
                 .flatMap(favoriteProducts -> productsClient.findAllProducts(filter)
                         .filter(product -> favoriteProducts.contains(product.id()))

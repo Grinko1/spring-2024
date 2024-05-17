@@ -19,10 +19,11 @@ public class FavoritesProductsRestController {
 
     @GetMapping
     public Flux<FavoriteProduct> getFavoriteProduct() {
+        System.out.println("Get favorites products "+ favoriteService.findFavoriteProducts());
         return favoriteService.findFavoriteProducts();
     }
 
-    @PostMapping()
+    @PostMapping
     public Mono<ResponseEntity<FavoriteProduct>> addToFavoriteProduct(@Valid @RequestBody Mono<NewFavoriteProductPayload> payloadMono,
                                                                       UriComponentsBuilder uriComponentsBuilder) {
 

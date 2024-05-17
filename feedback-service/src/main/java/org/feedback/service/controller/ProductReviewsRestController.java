@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 public class ProductReviewsRestController {
     private final ProductReviewsService reviewsService;
 
-    @GetMapping("/productId/{productId:\\d+")
+    @GetMapping("/productId/{productId:\\d+}")
     public Flux<ProductReview> getReviews(@PathVariable("productId") int productId) {
         return reviewsService.findProductReviewsByProductId(productId);
     }

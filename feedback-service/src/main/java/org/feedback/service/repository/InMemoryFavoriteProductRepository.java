@@ -15,6 +15,7 @@ public class InMemoryFavoriteProductRepository implements FavoriteProductReposit
     private final List<FavoriteProduct> favoriteProducts = Collections.synchronizedList(new LinkedList<>());
     @Override
     public Mono<FavoriteProduct> save(FavoriteProduct favoriteProduct) {
+        System.out.println("favoriteProducts list add "+ favoriteProducts);
         favoriteProducts.add(favoriteProduct);
         return Mono.just(favoriteProduct);
     }
@@ -34,6 +35,7 @@ public class InMemoryFavoriteProductRepository implements FavoriteProductReposit
 
     @Override
     public Flux<FavoriteProduct> findFavoriteProducts() {
+        System.out.println("favoriteProducts list  "+ favoriteProducts);
         return Flux.fromIterable(this.favoriteProducts);
     }
 }
