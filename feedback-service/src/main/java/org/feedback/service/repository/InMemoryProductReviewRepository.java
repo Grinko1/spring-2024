@@ -22,6 +22,7 @@ public class InMemoryProductReviewRepository implements ProductReviewRepository 
 
     @Override
     public Flux<ProductReview> findAllReviewsByProductId(int productId) {
+        System.out.println(reviews);
         return Flux.fromIterable(reviews )
                 .filter(i -> i.getProductId() == productId);
     }
