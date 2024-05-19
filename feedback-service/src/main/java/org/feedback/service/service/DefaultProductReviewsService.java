@@ -15,8 +15,8 @@ import java.util.UUID;
 public class DefaultProductReviewsService implements ProductReviewsService {
     private final ProductReviewRepository reviewRepository;
     @Override
-    public Mono<ProductReview> createProductReview(int productId, int rating, String review) {
-        return reviewRepository.save(new ProductReview(UUID.randomUUID(), productId, rating, review));
+    public Mono<ProductReview> createProductReview(int productId, int rating, String review, String userId) {
+        return reviewRepository.save(new ProductReview(UUID.randomUUID(), productId, rating, review, userId));
     }
 
     @Override

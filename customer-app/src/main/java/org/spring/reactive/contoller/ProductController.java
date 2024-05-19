@@ -9,9 +9,13 @@ import org.spring.reactive.client.ProductsClient;
 import org.spring.reactive.entity.Product;
 import org.spring.reactive.exceptions.ClientBadRequestException;
 import org.spring.reactive.payload.NewProductReviewPayload;
+
+import org.springframework.security.web.reactive.result.view.CsrfRequestDataValueProcessor;
+import org.springframework.security.web.server.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.NoSuchElementException;
@@ -88,5 +92,11 @@ public class ProductController {
     public String noSuchElementExceptionHandler(NoSuchElementException e, Model model){
     model.addAttribute("error" , e.getMessage());
     return "errors/404";
+    }
+    @ModelAttribute
+    public Mono<CsrfToken> loadCsrfToken(ServerWebExchange exchange){
+          return exchange.<Mono<CsrfToken>>getAttribute(CsrfToken.class.getName()).doOnSuccess(token -> exchange.getAttributes()
+                  .put(CsrfRequestDataValueProcessor.DEFAULT_CSRF_ATTR_NAME,
+                          token));
     }
 }

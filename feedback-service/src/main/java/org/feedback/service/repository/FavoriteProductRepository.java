@@ -10,8 +10,11 @@ import java.util.UUID;
 
 public interface FavoriteProductRepository extends ReactiveCrudRepository<FavoriteProduct, UUID> {
 
-    Mono<Void> deleteByProductId(int productId);
 
-    Mono<FavoriteProduct> findByProductId(int productId);
 
+    Flux<FavoriteProduct> findAllByUserId(String userId);
+
+    Mono<Void> deleteByProductIdAndUserId(int productId, String userId);
+
+    Mono<FavoriteProduct> findByProductIdAndUserId(int productId, String userId);
 }
