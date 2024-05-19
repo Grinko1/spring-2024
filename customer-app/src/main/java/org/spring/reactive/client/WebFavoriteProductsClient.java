@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.spring.reactive.entity.FavoriteProduct;
 import org.spring.reactive.exceptions.ClientBadRequestException;
 import org.spring.reactive.payload.NewFavoriteProductPayload;
+import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,17 +30,22 @@ public class WebFavoriteProductsClient implements FavoriteProductsClient {
 
     @Override
     public Mono<FavoriteProduct> addProductToFavorites(int productId) {
-        System.out.println("web client favorite add to favorite " + productId);
+        NewFavoriteProductPayload payload = new NewFavoriteProductPayload(productId);
         return this.webClient
                 .post()
                 .uri("/feedback-api/favorite-products")
-                .bodyValue(new NewFavoriteProductPayload(productId))
+                .contentType(MediaType.APPLICATION_JSON)  // Ensure Content-Type is set
+                .bodyValue(payload)
                 .retrieve()
                 .bodyToMono(FavoriteProduct.class)
                 .onErrorMap(WebClientResponseException.BadRequest.class,
-                        exception -> new ClientBadRequestException(exception,
-                                ((List<String>) exception.getResponseBodyAs(ProblemDetail.class)
-                                        .getProperties().get("errors"))));
+                        exception -> {
+                            System.err.println("BadRequest Exception: " + exception.getMessage());
+                            ProblemDetail problemDetail = exception.getResponseBodyAs(ProblemDetail.class);
+                            List<String> errors = problemDetail != null ? (List<String>) problemDetail.getProperties().get("errors") : Collections.emptyList();
+                            System.err.println("Errors: " + errors);
+                            return new ClientBadRequestException(exception, errors);
+                        });
     }
 
     @Override

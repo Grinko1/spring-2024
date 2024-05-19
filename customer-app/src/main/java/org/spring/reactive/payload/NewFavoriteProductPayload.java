@@ -1,4 +1,6 @@
 package org.spring.reactive.payload;
 
-public record NewFavoriteProductPayload(int id) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record NewFavoriteProductPayload(@JsonProperty("productId") int id) {
 }

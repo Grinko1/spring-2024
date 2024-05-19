@@ -31,8 +31,8 @@ public class FavoritesProductsRestController {
                 .flatMap(
                         payload -> favoriteService.addProductToFavorites(payload.productId())
                                 .map(favoriteProduct -> ResponseEntity.created(
-                                                uriComponentsBuilder.replacePath("/feedback-api/favorite-products/{productId}")
-                                                        .build(favoriteProduct.getProductId())
+                                                uriComponentsBuilder.replacePath("/feedback-api/favorite-products/{id}")
+                                                        .build(favoriteProduct.getId())
                                         ).body(favoriteProduct)
                                 ));
     }
