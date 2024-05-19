@@ -11,9 +11,11 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 public class SecurityBeans {
 
     @Bean
-    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http){
+    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         return http
-                .authorizeExchange(configurer -> configurer.anyExchange().authenticated())
+                .authorizeExchange(configurer -> configurer
+                        .pathMatchers("/webjars/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .anyExchange().authenticated())
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .oauth2ResourceServer(customizer -> customizer.jwt(Customizer.withDefaults()))

@@ -15,7 +15,9 @@ public class SecurityBeans {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
-                .authorizeHttpRequests(authorizeHttpRequests-> authorizeHttpRequests.requestMatchers(
+                .authorizeHttpRequests(authorizeHttpRequests-> authorizeHttpRequests
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                                .requestMatchers(
                         HttpMethod.POST,"/api/products")
                         .hasAuthority("SCOPE_edit_catalog")
                         .requestMatchers(HttpMethod.PATCH, "/api/products/{productId:\\d+}/edit")
